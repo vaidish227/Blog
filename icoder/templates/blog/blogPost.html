@@ -3,5 +3,13 @@
 {% block title %} Blogpost{% endblock title %}
 
 {% block body %}
-blog post
- {% endblock body %}
+<div class="container my-3">
+<div class="blog-post">
+        <h2 class="blog-post-title" style="color: #714717;">{{post.title}}</h2>
+        <p class="blog-post-meta" style="color: #a68560">{{post.timeStamp}} by <a href="#" style="color: #bb813f"><strong>{{post.author}}</strong></a></p>
+
+        <p style="color: #b66100">{{post.content}}</p>
+        <hr>
+      </div>
+      </div>
+ {% endblock %}

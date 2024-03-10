@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse
 from home.models import Contact
 from django.contrib import messages
+from blog.models import Post
 # Create your views here.
 def home(request):
     return render(request,'home/home.html')
@@ -27,3 +28,18 @@ def contact(request):
             messages.success(request, "Your message has been successfully sent")
     return render(request,'home/contact.html')
 
+#this function help to search the query from search button and the blog post
+#icontain is the way for search key word available in our post 
+def search(request):
+    query=request.GET['query']
+    if len(query)>78:
+        allPosts=Post.objects.none()
+    else:
+        allPostsTitle= Post.objects.filter(title__icontains=query)
+        allPostsAuthor= Post.objects.filter(author__icontains=query)
+        allPostsContent =Post.objects.filter(content__icontains=query)
+        allPosts=  allPostsTitle.union(allPostsContent, allPostsAuthor)
+    if allPosts.count()==0:
+        messages.warning(request, "No search results found. Please refine your query.")
+    params={'allPosts': allPosts, 'query': query}
+    return render(request, 'home/search.html', params)
