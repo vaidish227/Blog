@@ -13,7 +13,7 @@
   <body style='background-color: #decaaf'>
 
     <nav class="navbar navbar-expand-lg navbar-dark" style='background-color: #f7b466;'>
-        <a class="navbar-brand" href="/">iCoder</a>
+        <a class="navbar-brand" href="/" style="color: #714717;"><strong>iCoder</strong></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -21,7 +21,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item {% block homeactive %}{% endblock homeactive %}">
-              <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="/" >Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item {% block aboutactive %}{% endblock aboutactive %}">
               <a class="nav-link" href="/about">About</a>
@@ -40,19 +40,133 @@
           </form>
           <a href='/admin' class="btn m-2 my-sm-0"role='button' target='_blank' style='background-color: #987608c7;
             border-color: #867102;'>Admin Panel</a>
-        </div>
-      </nav>
       
-      <!-- this will help us to show alert messages-->
-      {% for message in messages  %}            
+          <!-- this will help us to show alert messages-->
+     <!--  {% for message in messages  %}            
       <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
             <strong>Message : </strong> {{ message }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-      {% endfor %}    
-      {% block body %}  {% endblock body %}
+      {% endfor %}  -->
+      
+      <!-- Button to  trigger SignUp modal -->
+      {% if user.is_authenticated %}
+      <ul class="navbar-nav mr-2">
+      <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href='#' id="navbarDropdown" role="button" data-toggle="dropdown" style="color: #714717;"> Welcome {{request.user}}</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown" style='background-color: #987608c7;
+      border-color: #867102;'>
+                <a class="dropdown-item" href="/logout" style='background-color: #987608c7;
+                border-color: #867102;'>Logout</a>
+      
+              </div>
+            </li>
+            </ul>
+            </div>
+      {% else %}
+      <!-- Button to  trigger Login modal -->
+      <button type="button" class="btn mr-2" data-toggle="modal" data-target="#loginModal" style='background-color: #987608c7;
+      border-color: #867102;'>
+        Login
+      </button>
+  
+      <button type="button" class="btn mr-2" data-toggle="modal" data-target="#signupModal" style='background-color: #987608c7;
+      border-color: #867102;'>
+       SignUp
+      </button>
+      {% endif %}
+  
+        </div>
+    </nav>
+        {% for message in messages  %}            
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+              <strong>Message : </strong> {{ message }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+        {% endfor %}    
+      <!-- SignUp Modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModal" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content" style='background-color: #f8deb7'>
+        <div class="modal-header">
+          <h5 class="modal-title" id="signupModalTitle">SignUp Here</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" >
+          <form action= "/signup" method='post'>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" class="form-control" id="username" name="username" placeholder="Choose a unique username"  required>
+    </div>
+    <div class="form-group">
+      <label for="fname">First Name</label>
+      <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter Your First Name" required>
+    </div>
+    <div class="form-group">
+      <label for="lname">Last Name</label>
+      <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter Your Last Name" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email address</label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+    </div>
+    <div class="form-group">
+      <label for="pass1">Choose a password</label>
+      <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Choose Your Password" required>
+    </div>
+    <div class="form-group">
+      <label for="pass2">Confirm Password</label>
+      <input type="password" class="form-control" id="pass2" name="pass2" placeholder="Enter your password again" required>
+    </div>
+   
+  
+          {% csrf_token %}
+          <button type="submit" class="btn" style='background-color: #987608c7;
+          border-color: #867102;'>Submit</button>
+    </form>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+    </div>
+  
+  
+        {% block body %}  {% endblock body %}
+  
+   <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" style='background-color: #f8deb7' >
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalTitle">Login Here</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+        <form action='/login' method='post'>
+          <div class="form-group">
+            <label for="username">Username</label>
+              <input type="text" class="form-control" id="loginusername" name="loginusername" placeholder="Choose a unique username">
+          </div>
+          <div class="form-group">
+            <label for="pass">Enter your password </label>
+              <input type="password" class="form-control" id="loginpassword" name="loginpassword" placeholder="Enter your password ">
+          </div>
+          {% csrf_token %}
+            <button type="submit" class="btn" style='background-color: #987608c7;
+              border-color: #867102;'>Submit</button>
+        </form>
+        </div>
+         <div class="modal-footer">
+        </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
