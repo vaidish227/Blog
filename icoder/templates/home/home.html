@@ -3,12 +3,41 @@
 {% block title %} Home{% endblock title %}
 
 {% block body %}
+
+  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+      <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+      <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+      <div class="carousel-item active"  style ="height: 360px;">
+        <img style="width:100%; height:360px" src="https://source.unsplash.com/random/?nature,morning" alt="First slide">
+      </div>
+      <div class="carousel-item" style ="height: 360px;">
+        <img style="width:100%; height:360px;"  src="https://source.unsplash.com/random/?river,evening" alt="Second slide">
+      </div>
+      <div class="carousel-item" style ="height: 360px;">
+        <img style="width:100%; height:360px"  src="https://source.unsplash.com/random/?mountains" alt="Third slide">
+      </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+
+
 <div class="container my-3">
 <div class="jumbotron my-3 rounded" style='background-color: #c8b39366'>
   <h1 class="display-4"><b style="color: #714717;">Welcome to iCoder!</b></h1>
-  <p class="lead" style="color: #714717;">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+  <p class="lead" style="color: #714717;">As a fellow coder, I’m thrilled to have you here. Whether you’re a seasoned developer or just starting your coding journey, this blog is your tech haven. Expect insightful articles, practical tips, and code snippets galore. </p>
   <hr class="my-4">
-  <p style="color: #714717;">It uses utility classes for typography and spacing to space content out within the larger container.</p>
+  <p style="color: #714717;">This is the website for coding blogs.</p>
   <a class="btn btn-primary btn-lg" href="/blog" role="button" style='background-color: #987608c7;
   border-color: #867102;'>Go to Blog</a>
   </div>
@@ -17,7 +46,8 @@
     <h2 style="color: #714717;">Popular Blogposts</h2>
     <div class="container my-3">
       <h2 style='color:#714717'>Coding Articles by iCoder</h2>
-      {% for post in allPosts  %}
+      
+      {% for post in allPosts %}
       <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 my-4 position-relative">
           <div class="col p-4 d-flex flex-column position-static">
               <strong class="d-inline-block mb-2 " style='color:#c07620'>Article  by {{post.author}}</strong>
@@ -30,12 +60,7 @@
               </div>
               
           </div>
-          <div class="col-auto d-none d-lg-block">
-              <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
-                  <title>Placeholder</title>
-                  <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-              </svg>
-          </div>
+    
           </div>
   
           {% endfor %}

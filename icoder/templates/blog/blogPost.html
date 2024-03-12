@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
-
 {% block title %} Blogpost{% endblock title %}
-
 {% block body %}
+{% load humanize %}
+{% load extras %}
 <div class="container my-3">
-<div class="blog-post">
-        <h2 class="blog-post-title" style="color: #714717;">{{post.title}}</h2>
-        <p class="blog-post-meta" style="color: #a68560">{{post.timeStamp}} by <a href="#" style="color: #bb813f"><strong>{{post.author}}</strong></a></p>
-
-        <p style="color: #b66100">{{post.content}}</p>
-        <hr>
-      </div>
-      <div class="container">
-        <h2 style="color: #714717;"> Comments</h2>
+    <h2 class="blog-post-title" style="color: #714717;">{{post.title}}</h2>
+    <p class="blog-post-meta" style='color:#c07620'>{{post.timeStamp}} by <a href="/about" style='color:#c07620'><strong>{{post.author}}</strong></a><span > {{post.views}} views</span></p>
+    <p style="color: #714717;">{{post.content|safe}}</p>
+    <hr>
+</div>
+<div class="container">
+    <h2 style="color: #714717;"> Comments ({{comments.count}}) </h2>
+    <div class="my-2">
+        {% if user.is_authenticated %}
         <form action="/blog/postComment" method="post">
             {% csrf_token %}
             <div class="form-group">
@@ -20,19 +20,67 @@
                 <input type="text" class="form-control" name="comment" placeholder="Enter comment here">
             </div>
             <input type="hidden" name="postSno" value="{{post.sno}}">
+            <input type="hidden" name="parentSno" value="">
             <button type="submit" class="btn btn-primary" style='background-color: #987608c7;
             border-color: #867102;'>Submit</button>
         </form>
-        {% for comment in comments %}
-        <div class="row my-3">
-            <div class="col-md-1  ">
-            <img class="rounded mx-auto d-block w-100 p-2" src="/static/img/user.png.png"  alt="user">
+        {% else %}
+       <p style="color: #714717;"> Please login to post a comment </p>
+        {% endif %}
+    </div>
+    {% for comment in comments %}
+    <div class="row my-3">
+        <div class="col-md-1  ">
+            <img class="rounded mx-auto d-block w-100 border border-dark p-2" src="/static/img/user.png.png" alt="user">
+        </div>
+        <div class="col-md-11 ">
+            <b style="color: #714717;"> {{comment.user.username}} </b> <span class="badge" style='color: #987608c7;border-color: #867102;'>{{comment.timestamp| naturaltime}}</span>
+            <div style="color: #714717;">{{comment.comment}}</div>
+            <div class="reply mx-0">
+                {% if user.is_authenticated %}
+                <button class="btn btn-sm btn-primary" style='background-color: #987608c7;
+                border-color: #867102;' type="button" data-toggle="collapse" data-target="#replyBox{{comment.sno}}" aria-expanded="false" aria-controls="replyBox{{comment.sno}}">
+                    Reply
+                </button>
+                <div class="collapse" id="replyBox{{comment.sno}}">
+                    <div class="card card-body my-2"  style='background-color: #f8deb7'>
+                        <form action="/blog/postComment" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="comment" style="color: #714717;">Post a reply </label>
+                                <input type="text" class="form-control" name="comment" placeholder="Enter comment here">
+                                <input type="hidden" name="parentSno" value="{{comment.sno}}">
+                            </div>
+                            <input type="hidden" name="postSno" value="{{post.sno}}">
+                            <button type="submit" class="btn btn-primary" style='background-color: #987608c7;
+                            border-color: #867102;'>Submit</button>
+                        </form>
+                    </div>
+                </div>
+                {% else %}
+                <button class="btn btn-sm btn-primary" style='background-color: #987608c7; border-color: #867102;' type="button" data-toggle="collapse" data-target="#replyBox{{comment.sno}}" aria-expanded="false" aria-controls="replyBox{{comment.sno}}">
+                    Login to reply
+                </button>
+                {% endif %}
+                <div class="replies my-2 ">
+                    {% for reply in replyDict|get_val:comment.sno %}
+                    <div class="row my-2">
+                        <div class="col-md-1 ">
+                            <img class="rounded mx-auto d-block w-75 my-2 border border-dark p-2" src="/static/img/user.png.png" alt="user">
+                        </div>
+                        <div class="col-md-11">
+                            <div class="col-md-11 ">
+                                <b style="color: #714717;"> {{reply.user.username}} </b> <span class="badge " style='color: #987608c7;border-color: #867102;'>{{reply.timestamp| naturaltime}}</span>
+                                <div style="color: #714717;">{{reply.comment}}</div>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="col-md-11 " style="color: #714717;"> 
-            <b> {{comment.user.username}} </b> at {{comment.timestamp}}
-            <div>   {{comment.comment}} </div>
         </div>
-        </div>
-        {% endfor %}
-      </div>
- {% endblock %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -6,14 +6,19 @@ from blog.models import Post
 #this is inbuilt facility
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login , logout
+from blog.views import blogHome
 
 # HTML Pages.
 def home(request):
-    return render(request,'home/home.html')
+    allPosts= Post.objects.all()
+    context={'allPosts': allPosts}
+    return render(request,'home/home.html',context)
     #return HttpResponse('this is home')
 
 def about(request):
-   return render(request,'home/about.html') 
+    allPosts= Post.objects.all()
+    context={'allPosts': allPosts}
+    return render(request,'home/about.html',context) 
 
 #this will use for post request and save the data in the data base..
 # Contact page
