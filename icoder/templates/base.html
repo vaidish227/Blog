@@ -126,10 +126,12 @@
     </div>
    
   
-          {% csrf_token %}
+          
           <button type="submit" class="btn" style='background-color: #987608c7;
           border-color: #867102;'>Submit</button>
+          {% csrf_token %}
     </form>
+    
         </div>
         <div class="modal-footer">
         </div>
@@ -161,9 +163,10 @@
             <label for="pass">Enter your password </label>
               <input type="password" class="form-control" id="loginpassword" name="loginpassword" placeholder="Enter your password ">
           </div>
-          {% csrf_token %}
+          
             <button type="submit" class="btn" style='background-color: #987608c7;
               border-color: #867102;'>Submit</button>
+              {% csrf_token %}
         </form>
         </div>
          <div class="modal-footer">
